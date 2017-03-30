@@ -17,16 +17,21 @@ RUN \
   apt-get install -y byobu curl git htop man unzip vim wget && \
   rm -rf /var/lib/apt/lists/*
 
+#Creating user
+RUN groupadd -g 1000 gadm
+RUN useradd -m -u 1000 -g 1000 gadm
+
 # Add files.
-ADD root/.bashrc /root/.bashrc
-ADD root/.gitconfig /root/.gitconfig
-ADD root/.scripts /root/.scripts
+ADD root/.bashrc /home/gadm/.bashrc
+ADD root/.scripts/* /home/gadm/
 
 # Set environment variables.
-ENV HOME /root
+ENV HOME /home/gadm
+RUN chown -R gadm:gadm /home/gadm
 
 # Define working directory.
-WORKDIR /root
+WORKDIR /home/gadm
+USER gadm
 
 # Define default command.
-CMD ["bash"]
+CMD ["bash"] 
